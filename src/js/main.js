@@ -8,7 +8,7 @@
 const input = document.querySelector('.js-search');
 const btnSearch = document.querySelector('.js-btn-search');
 const btnReset = document.querySelector('.js-btn-reset');
-const listResult= document.querySelector('.js-result');
+const listResult= document.querySelector('.js-container-result');
 const listFav= document.querySelector('.js-container-fav');
 
 let url = 'https://api.jikan.moe/v4/anime?q=naruto';
