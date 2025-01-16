@@ -11,49 +11,75 @@ const btnReset = document.querySelector('.js-btn-reset');
 const listResult= document.querySelector('.js-container-result');
 const listFav= document.querySelector('.js-container-selected-fav');
 
-let url = 'https://api.jikan.moe/v4/anime?q=naruto';
+let url = 'https://api.jikan.moe/v4/anime?q=';
 let search = url;
 let animeList = [];
 let favAnime = [];
 
 
-//evento añadir anime favoritos
+//INICIO evento btn reset
+const handleClickReset = () => {//se crea una funcion para limpiar el input, los favoritos y el contenedor de resultados
+    input.value = '';
+    listFav.innerHTML = '';
+    listResult.innerHTML = '';
+}
+btnReset.addEventListener('click', handleClickReset);//al final de la funtion debemos llamar el boton para que se ejecute
+//FIN event reset
 
+
+//INICIO evento añadir anime favoritos
 const favList = ()=>{
-    const favAnime = document.querySelectorAll('.js-anime');
+    const favAnime = document.querySelectorAll('.js-anime');//ponemos el querySelectorAll para que se seleccione todas las imagenes de los animes
     for (const img of favAnime){
         img.addEventListener('click', handleClickFav);
     }
 
 }
+//FIN evento añadir fav
+
+
+
 //llamamos al evento de handleclickfav añadimos una funcion para que al hacer click en la imagen del anime se añada a la lista de favoritos
 //Ademas debemos comprobar si el anime ya esta en la lista de favoritos (let animeList), si ya esta no se debe añadir a la lista de favoritos
+//ademas se añade la funcion de localStorage para que los favoritos no se pierdan al recargar la pagina, se pone al final de esta función ya que es la última que se ejecuta cuando todos los datos ya estan listos.
+
+//INICIO ev de:hacer click en la imagen se añade a la lista de fav y LS
 const handleClickFav= (ev) => {
     const imgClick = parseInt(ev.currentTarget.id);
     console.log(imgClick);//con esto se puede ver en el console si se obtiene el id de la imagen al hacer click
     const imgSelected = animeList.find((eachAnimeList) => eachAnimeList.mal_id === imgClick);//se busca el id de la imagen seleccionada en la lista de animes y se mostrara en el console
     console.log(imgSelected);
-    const indexAnimeList = favAnime.findIndex((animeListe) => animeListe.mal_id === imgClick);//se busca el id de la imagen seleccionada en la lista de favoritos y para que no se repita hacemos una condicion de IF
+    const indexAnimeList = favAnime.findIndex((animeListe) => animeListe.mal_id === imgClick);//se busca el id de la imagen seleccionada en la lista de favoritos para que no se repita hacemos una condicion de IF
     if (indexAnimeList === -1){
         favAnime.push(imgSelected);
+        ev.currentTarget.style.border = '5px solid red';//se añade un borde rojo al hacer click en la imagen
         console.log(favAnime);
         renderFavList();
+
+    } else {
+        favAnime.splice(indexAnimeList, 1); //sirve para eliminar un elemento de la lista de favoritos
     }
-    //favAnime.splice(indexAnimeList, 1); sirve para eliminar un elemento de la lista de favoritos
-
+ localStorage.setItem('favAnimeServer', JSON.stringify(favAnime));//se guarda la lista de favoritos en el localstorage y asi no se pierde la lista al recargar la pagina
 };
+//FIN
 
-//evento para mostrar la lista de favoritos
 
+
+//INICIO
+//evento para RENDERIZAR FAV EN la lista de fa y en LocalStorage
 const renderFavList = () => {
     listFav.innerHTML = '';
     favAnime.forEach((element) => {
         listFav.innerHTML += `
         <img class="js-anime" src="${element.images.jpg.image_url}" alt="Imagen del Anime"/> <p class="anime-title">${element.title}</p>`;
     });
+    localStorage.setItem('favAnimeServer', JSON.stringify(favAnime));
 };
+//FIN
 
-//Eventos btnSearch y API
+
+
+//INICIO: Eventos btnSearch y API
 const handleClick = (ev) => {
     ev.preventDefault();
     console.log('click');
@@ -68,15 +94,27 @@ const handleClick = (ev) => {
             let imagesHTML = '';//se usa para guardar el siguiente codigo
             //Ahora se accede a la url de la imagen
             info.data.forEach((element) => {
-                const styleFav = favAnime.some(animefav => animefav.mal_id === element.mal_id);//si en la lista de fav se encuentra el mismo id del animeList, se le asigna estilo css.
-                const css = styleFav ? 'favorite' : '';//si se encuentra poner estilo css sino nada"".
                 const imagesUrl = element.images.jpg.image_url;//creamos una variable para guardar la url de la imagen
                 const animeTitle = element.title;//creamos una variable para guardar el titulo del anime
-                imagesHTML += `<img class="js-anime" src="${imagesUrl}" alt="Imagen del Anime" id="${element.mal_id}" ${css}/> <p class="anime-title">${animeTitle}</p>`;// se guarda la url de la variable imagesUrl en una estructura html de <img> en la variable imagesHTML, luego llamamos a la variable imagesHTML más abajo en el listResult.innerHTML
+                imagesHTML += `<img class="js-anime" src="${imagesUrl}" alt="Imagen del Anime" id="${element.mal_id}"/> <p class="anime-title">${animeTitle}</p>`;// se guarda la url de la variable imagesUrl en una estructura html de <img> en la variable imagesHTML, luego llamamos a la variable imagesHTML más abajo en el listResult.innerHTML
             });
             listResult.innerHTML = imagesHTML;//se pinta en el html
             favList();
         });
 };
 btnSearch.addEventListener('click', handleClick);
-//final eventos btnSearch y API
+//FIN eventos btnSearch y API
+
+
+
+//INICIO LOCALSTORAGE guardar favoritos en LS
+const dataFavLS = localStorage.getItem('favAnimeServer');
+if (dataFavLS) {
+    favAnime = JSON.parse(dataFavLS);
+    renderFavList(favAnime);
+    console.log("Favoritos cargados");
+} else {
+    fetch(search);
+    console.log("No hay favoritos");
+}
+//FIN LOCALSTORAGE
