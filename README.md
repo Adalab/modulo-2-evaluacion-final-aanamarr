@@ -1,125 +1,89 @@
-![Adalab](https://beta.adalab.es/resources/images/adalab-logo-155x61-bg-white.png)
+Anime Favorites Web Application
 
-# Adalab web starter kit
+Description
 
-Ahoy! Este es nuestro Starter Kit creado en **node y vite**. ¿Y qué es un Starter kit? Pues es una **plantilla de proyecto con funcionalidades preinstaladas y preconfiguradas**.
+This web application allows users to search for their favorite anime series using the Jikan API and manage a personalized list of favorite animes. Users can add an anime to their favorites by clicking on an image, highlight it, and remove it from the favorites using a delete button. The favorites list is saved in the browser’s localStorage to preserve it between sessions.
 
-Este Kit incluye un motor de plantillas HTML, el preprocesador SASS y un servidor local y muchas cosas más. El Kit nos ayuda a trabajar más cómodamente, nos automatiza tareas.
+Features
 
-En el Kit hay 3 tipos de ficheros y carpetas:
+🔍 Search Anime: Users can search for anime titles using the search bar, which queries the Jikan API.
 
-- Los ficheros que están sueltos en la raíz del repositorio, como vite.config.js, package.json... Son la configuración del proyecto y no necesitamos modificarlos (excepto este README.md, para describir tu proyecto).
-- La carpeta `src/`: son los ficheros de nuestra página web, como HTML, CSS, JS...
-- La carpeta `public/`, que tiene fichero estáticos como imágenes, fuentes, favicon, librerías de JavaScript antiguas (jQuery, ...)
-- Y la carpeta `docs/`, que es generada automáticamente cuando arrancamos el proyecto. El Kit lee los ficheros que hay dentro de `src/` y `public/`, los procesa y los genera dentro de `public/` y `docs/`.
+❤️ Add to Favorites: Click on an anime image in the search results to add it to the favorites list.
 
-## Guía de inicio rápido
+❌ Remove from Favorites: A button is provided to remove specific anime from the favorites.
 
-> **NOTA:** Necesitas tener instalado [Node JS](https://nodejs.org/) con una versión superior a la 14 para trabajar con este Starter Kit:
+🗑️ Clear Favorites: A button to clear all items from the favorites list.
 
-### Pasos a seguir cada vez que queremos arrancar un proyecto desde cero:
+💾 LocalStorage Integration: Favorites are stored in the browser to maintain state after page refresh.
 
-1. **Crea tu propio repositorio.**
-1. Descarga este **Starter kit desde GitHub**.
-   - No recomendamos que clones este repo ya que no podrás añadir commits.
-1. **Copia todos los ficheros** de este Starter kit en la carpeta raíz de tu repositorio.
-   - Recuerda que debes copiar **también los ficheros ocultos** que comienzan por un punto.
-   - Si has decidido clonar este repo, no debes copiar la carpeta `.git`. Si lo haces estarás machacando tu propio repositorio.
-1. **Abre una terminal** en la carpeta raíz de tu repositorio.
-1. **Instala las dependencias** locales ejecutando en la terminal el comando:
+Technologies Used
 
-```bash
-npm install
-```
+🌐 HTML5
 
-### Pasos para arrancar el proyecto:
+🎨 CSS3
 
-Una vez hemos instalado las dependencias, vamos a arrancar el proyecto. **El proyecto hay que arrancarlo cada vez que te pongas a programar.** Para ello ejecuta el comando:
+⚙️ JavaScript ES6
 
-```bash
-npm run dev
-```
+📡 Jikan API (https://api.jikan.moe)
 
-Este comando:
+🗄️ LocalStorage
 
-- **Abre una ventana de Chrome y muestra tu página web**, al igual que hace el plugin de VS Code Live Server (Go live).
-- También **observa** todos los ficheros que hay dentro de la carpeta `src/`, para que cada vez que modifiques un fichero **refresca tu página en Chrome**.
-- También **procesa los ficheros** HTML, SASS / CSS y JS. Por ejemplo:
-   - Convierte los ficheros SASS en CSS.
-   - Combina los diferentes ficheros de HTML y los agrupa en uno o varios ficheros HTML.
+Code Structure
 
-Después de ejecutar `npm run dev` ya puedes empezar a editar todos los ficheros que están dentro de la carpeta `src/` y programar cómodamente.
+Variables and DOM Elements
 
-### Pasos para publicar el proyecto en GitHub Pages:
+input: Search input field.
 
-Para generar tu página para producción ejecuta el comando:
+btnSearch: Button to trigger the search.
 
-```bash
-npm run build
-```
+btnReset: Button to reset search results and favorites.
 
-Y a continuación:
+btnEliminateFav: Button to clear all favorite anime.
 
-1. Sube a tu repo la carpeta `docs/` que se te acaba de generar.
-1. Entra en la pestaña `settings` de tu repo.
-1. Y en el apartado de GitHub Pages activa la opción **master branch /docs folder**.
-1. Y ya estaría!!!
+listResult: Container for displaying search results.
 
-Además, los comandos:
+listFav: Container for displaying favorite anime.
 
-```bash
-npm run push-docs
-```
-o
+Functions
 
-```bash
-npm run deploy
-```
+Search and Display
 
-son un atajo que nos genera la versión de producción y hace push de la carpeta `docs/` del tirón. Te recomendamos ver el fichero `package.json` para aprender cómo funciona.
-<!--
-## Flujo de archivos con Gulp
+🔎 handleClick: Fetches anime data from the Jikan API based on the search input and displays the results.
 
-Estas tareas de Gulp producen el siguiente flujo de archivos:
+🖼️ renderFavList: Renders the current list of favorite animes in the listFav container.
 
-![Gulp flow](./gulp-flow.png)
+Favorites Management
 
-## `gulpfile.js` y `config.json`
+✨ handleClickFav: Adds an anime to the favorites or removes it if already present.
 
-Nuestro **gulpfile.js** usa el fichero `config.json` de configuración con las rutas de los archivos a generar / observar.
+❎ handleClickEliminateFav: Removes a specific anime from the favorites using its unique ID.
 
-De esta manera separarmos las acciones que están en `gulpfile.js` de la configuración de las acciones que están en `config.json`.
--->
-## Estructura de carpetas
+🧹 handleClickEliminateAllFav: Clears all favorites and updates LocalStorage.
 
-La estructura de carpetas tiene esta pinta:
+Utility Functions
 
-```
-src
- ├─ api // los ficheros de esta carpeta se copian en public/api/
- |  └─ data.json
- ├─ images
- |  └─ logo.jpg
- ├─ js // los ficheros de esta carpeta se concatenan en el fichero main.js y este se guarda en public/main.js
- |  ├─ main.js
- |  └─ events.js
- ├─ scss
- |  ├─ components
- |  ├─ core
- |  ├─ layout
- |  └─ pages
- └─ html
-    └─ partials
-```
+📋 favList: Attaches click event listeners to images of anime in search results.
 
-> **NOTA:** Los partials de HTML y SASS del proyecto son orientativos. Te recomendamos usar los que quieras, y borrar los que no uses.
-<!--
-## Vídeotutoriales del Starter kit
+🔗 addEliminateFavListeners: Adds click event listeners to the delete buttons in the favorites list.
 
-- [Qué es, trabajar con la versión de desarrollo y rutas relativas](https://www.youtube.com/watch?v=XwvhXvBijos)
-- [Migración de un proyecto, trabajar con la versión de producción y GitHub Pages](https://www.youtube.com/watch?v=qqGClcgt9Uc)
-- [Motor de plantillas](https://www.youtube.com/watch?v=4GwXOJ045Zg)
--->
-## Falta algo?
+LocalStorage Management
 
-Echas de menos que el kit haga algo en concreto? Pidelo sin problema a través de las issues o si te animas a mejorarlo mándanos un PR :)
+Data is saved to LocalStorage using the key favAnimeServer.
+
+On page load, the application checks for existing data and loads it if available.
+
+How to Run
+
+🖥️ Clone or download the repository.
+
+🌐 Open the index.html file in a web browser.
+
+🔎 Use the search bar to find anime titles and add them to your favorites.
+
+Future Improvements
+
+🔒 Add user authentication to sync favorites across devices.
+
+📄 Implement pagination for better search result navigation.
+
+🎨 Improve UI/UX with more styling and animations.
