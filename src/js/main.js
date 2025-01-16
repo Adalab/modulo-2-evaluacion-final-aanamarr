@@ -8,13 +8,28 @@
 const input = document.querySelector('.js-search');
 const btnSearch = document.querySelector('.js-btn-search');
 const btnReset = document.querySelector('.js-btn-reset');
+const btnEliminateFav = document.querySelector('.js-eliminar-fav');
 const listResult= document.querySelector('.js-container-result');
 const listFav= document.querySelector('.js-container-selected-fav');
+
 
 let url = 'https://api.jikan.moe/v4/anime?q=';
 let search = url;
 let animeList = [];
 let favAnime = [];
+
+
+
+
+//INICIO evento eliminar fav
+const handleClickEliminateAllFav = () => {
+    favAnime = [];//para que se borre todos los datos de favAnime
+    listFav.innerHTML = '';
+    localStorage.setItem('favAnimeServer', JSON.stringify(favAnime));//también debemos borrar todo el localstorage sino al recargar la pagina volverá a salir los datos guardados en fav
+}
+btnEliminateFav.addEventListener('click', handleClickEliminateAllFav);
+//FIN evento eliminar fav
+
 
 
 //INICIO evento btn reset
@@ -35,6 +50,7 @@ const favList = ()=>{
     }
 
 }
+
 //FIN evento añadir fav
 
 
@@ -70,14 +86,33 @@ const handleClickFav= (ev) => {
 const renderFavList = () => {
     listFav.innerHTML = '';
     favAnime.forEach((element) => {
-        listFav.innerHTML += `
-        <img class="js-anime" src="${element.images.jpg.image_url}" alt="Imagen del Anime"/> <p class="anime-title">${element.title}</p>`;
+        listFav.innerHTML += 
+        `<div class="">
+            <img class="js-anime" src="${element.images.jpg.image_url}" alt="Imagen del Anime"/> 
+            <p class="anime-title">${element.title}</p>
+            <button class="js-eliminate-fav" id="${element.mal_id}">X</button>
+        </div>`;
     });
     localStorage.setItem('favAnimeServer', JSON.stringify(favAnime));
+    addEliminateFavListeners();
 };
 //FIN
 
+const addEliminateFavListeners = () => {
+    const btnEliminateFav = document.querySelectorAll('.js-eliminate-fav');
+    for (const btn of btnEliminateFav) {
+        btn.addEventListener('click', handleClickEliminateFav);
+    }
+};
 
+
+
+const handleClickEliminateFav = (ev) => {
+    const favId = parseInt(ev.currentTarget.id); // Obtener el ID del anime desde el botón
+    favAnime = favAnime.filter((anime) => anime.mal_id !== favId); 
+    renderFavList(); // Volver a renderizar la lista
+    localStorage.setItem('favAnimeServer', JSON.stringify(favAnime)); // Actualizar localStorage
+};
 
 //INICIO: Eventos btnSearch y API
 const handleClick = (ev) => {
