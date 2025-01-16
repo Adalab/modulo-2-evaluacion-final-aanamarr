@@ -68,7 +68,7 @@ const handleClickFav= (ev) => {
     const indexAnimeList = favAnime.findIndex((animeListe) => animeListe.mal_id === imgClick);//se busca el id de la imagen seleccionada en la lista de favoritos para que no se repita hacemos una condicion de IF
     if (indexAnimeList === -1){
         favAnime.push(imgSelected);
-        ev.currentTarget.style.border = '5px solid red';//se añade un borde rojo al hacer click en la imagen
+        ev.currentTarget.style.border = '7px solid purple';//se añade un borde rojo al hacer click en la imagen
         console.log(favAnime);
         renderFavList();
 
@@ -90,7 +90,7 @@ const renderFavList = () => {
         `<div class="">
             <img class="js-anime" src="${element.images.jpg.image_url}" alt="Imagen del Anime"/> 
             <p class="anime-title">${element.title}</p>
-            <button class="js-eliminate-fav" id="${element.mal_id}">X</button>
+            <button class="btneliminate js-eliminate-fav" id="${element.mal_id}">X</button>
         </div>`;
     });
     localStorage.setItem('favAnimeServer', JSON.stringify(favAnime));
